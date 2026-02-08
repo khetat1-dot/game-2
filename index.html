@@ -141,25 +141,36 @@
     const players = ["Tanay", "Shreya"];
     let currentPlayer = 0;
     let index = 0;
+    let tiebreakerMode = false;
 
-    const scores = {
-      Tanay: 0,
-      Shreya: 0
-    };
+    const scores = { Tanay: 0, Shreya: 0 };
 
     const questions = [
       { text: "What is Shreya’s favorite color?", about: "Shreya" },
       { text: "What is Tanay’s favorite color?", about: "Tanay" },
       { text: "What is Shreya’s favorite food?", about: "Shreya" },
       { text: "What is Tanay’s favorite food?", about: "Tanay" },
-      { text: "What music genre does Shreya enjoy the most?", about: "Shreya" },
-      { text: "What music genre does Tanay enjoy the most?", about: "Tanay" },
-      { text: "What time of day is Shreya most energetic?", about: "Shreya" },
-      { text: "What time of day is Tanay most energetic?", about: "Tanay" },
-      { text: "What’s something Shreya never gets tired of?", about: "Shreya" },
-      { text: "What’s something Tanay never gets tired of?", about: "Tanay" },
-      { text: "What’s one thing that always puts Shreya in a good mood?", about: "Shreya" },
-      { text: "What’s one thing that always puts Tanay in a good mood?", about: "Tanay" }
+      { text: "What kind of music does Shreya like the most?", about: "Shreya" },
+      { text: "What kind of music does Tanay like the most?", about: "Tanay" },
+      { text: "What time of day is Shreya most active?", about: "Shreya" },
+      { text: "What time of day is Tanay most active?", about: "Tanay" },
+      { text: "What’s Shreya’s favorite way to relax?", about: "Shreya" },
+      { text: "What’s Tanay’s favorite way to relax?", about: "Tanay" },
+      { text: "What’s one thing Shreya never gets tired of?", about: "Shreya" },
+      { text: "What’s one thing Tanay never gets tired of?", about: "Tanay" },
+      { text: "What’s Shreya’s favorite drink?", about: "Shreya" },
+      { text: "What’s Tanay’s favorite drink?", about: "Tanay" },
+      { text: "What’s a hobby Shreya enjoys?", about: "Shreya" },
+      { text: "What’s a hobby Tanay enjoys?", about: "Tanay" },
+      { text: "What kind of weather does Shreya prefer?", about: "Shreya" },
+      { text: "What kind of weather does Tanay prefer?", about: "Tanay" }
+    ];
+
+    const tiebreakers = [
+      "What is the other person’s favorite snack?",
+      "What color suits the other person the most?",
+      "What’s the other person’s comfort movie?",
+      "What’s the other person more likely to do on a free evening?"
     ];
 
     const turnText = document.getElementById("turnText");
@@ -192,12 +203,19 @@
     }
 
     function endGame() {
+      if (scores.Tanay === scores.Shreya && !tiebreakerMode) {
+        tiebreakerMode = true;
+        const randomQ = tiebreakers[Math.floor(Math.random() * tiebreakers.length)];
+        turnText.textContent = "🔥 TIEBREAKER";
+        questionText.textContent = randomQ;
+        progressBar.style.width = "100%";
+        return;
+      }
+
       const result =
         scores.Tanay > scores.Shreya
           ? "🏆 Tanay wins!"
-          : scores.Shreya > scores.Tanay
-          ? "🏆 Shreya wins!"
-          : "🤝 It’s a tie!";
+          : "🏆 Shreya wins!";
 
       turnText.textContent = "Game Over";
       questionText.innerHTML = `
@@ -206,7 +224,6 @@
           <p>Final score — Tanay: ${scores.Tanay} · Shreya: ${scores.Shreya}</p>
         </div>
       `;
-      progressBar.style.width = "100%";
       document.getElementById("correctBtn").disabled = true;
       document.getElementById("wrongBtn").disabled = true;
     }
