@@ -1,0 +1,85 @@
+<script>
+  const players = ["Tanay", "Shreya"];
+  let scores = [0, 0];
+  let currentPlayer = 0;
+  let qIndex = 0;
+
+  const questions = [
+    // About Shreya
+    { text: "What is Shreya’s favorite color?", about: "Shreya" },
+    { text: "What is Shreya’s favorite comfort food?", about: "Shreya" },
+    { text: "What kind of music does Shreya enjoy the most?", about: "Shreya" },
+    { text: "What’s one thing that always puts Shreya in a good mood?", about: "Shreya" },
+
+    // About Tanay
+    { text: "What is Tanay’s favorite color?", about: "Tanay" },
+    { text: "What food could Tanay eat any day?", about: "Tanay" },
+    { text: "How does Tanay usually relax after a long day?", about: "Tanay" },
+    { text: "What’s Tanay’s biggest pet peeve?", about: "Tanay" },
+
+    // BOTH answer question
+    {
+      text: "BOTH ANSWER: What is the other person’s favorite color?",
+      about: "Both"
+    },
+
+    // More mixed
+    { text: "What’s something Shreya really values in people?", about: "Shreya" },
+    { text: "What’s something Tanay is quietly proud of?", about: "Tanay" },
+    { text: "What’s one habit Shreya has that others notice?", about: "Shreya" },
+    { text: "What’s one habit Tanay has that others notice?", about: "Tanay" }
+  ];
+
+  const turnText = document.getElementById("turnText");
+  const questionText = document.getElementById("questionText");
+  const scoreA = document.getElementById("scoreA");
+  const scoreB = document.getElementById("scoreB");
+  const bar = document.getElementById("bar");
+
+  function updateUI() {
+    const q = questions[qIndex];
+
+    if (q.about === "Both") {
+      turnText.textContent = "Both answer";
+    } else {
+      turnText.textContent = `${players[currentPlayer]}'s turn (about ${q.about})`;
+    }
+
+    questionText.textContent = q.text;
+    scoreA.textContent = scores[0];
+    scoreB.textContent = scores[1];
+    bar.style.width = `${(qIndex / questions.length) * 100}%`;
+  }
+
+  function next(correct) {
+    if (correct) scores[currentPlayer]++;
+    currentPlayer = 1 - currentPlayer;
+    qIndex++;
+
+    if (qIndex >= questions.length) return endGame();
+    updateUI();
+  }
+
+  function endGame() {
+    let winner =
+      scores[0] > scores[1] ? "🏆 Tanay wins!" :
+      scores[1] > scores[0] ? "🏆 Shreya wins!" :
+      "🤝 It’s a tie!";
+
+    questionText.innerHTML = `
+      <div class="final">
+        <h2>${winner}</h2>
+        <p>Final score — Tanay: ${scores[0]} · Shreya: ${scores[1]}</p>
+      </div>
+    `;
+    turnText.textContent = "Game Over";
+    bar.style.width = "100%";
+    document.getElementById("correctBtn").disabled = true;
+    document.getElementById("wrongBtn").disabled = true;
+  }
+
+  document.getElementById("correctBtn").onclick = () => next(true);
+  document.getElementById("wrongBtn").onclick = () => next(false);
+
+  updateUI();
+</script>
