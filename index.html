@@ -41,7 +41,7 @@
 
     .scoreboard {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       font-weight: 700;
       color: var(--accent-2);
     }
@@ -137,27 +137,29 @@
     </div>
   </div>
 
-  <script>
+  <script defer>
     const players = ["Tanay", "Shreya"];
-    let scores = { Tanay: 0, Shreya: 0 };
-    let currentPlayerIndex = 0;
-    let qIndex = 0;
+    let currentPlayer = 0;
+    let index = 0;
+
+    const scores = {
+      Tanay: 0,
+      Shreya: 0
+    };
 
     const questions = [
       { text: "What is Shreya’s favorite color?", about: "Shreya" },
       { text: "What is Tanay’s favorite color?", about: "Tanay" },
-      { text: "What food could Shreya eat any day?", about: "Shreya" },
-      { text: "What food could Tanay eat any day?", about: "Tanay" },
-      { text: "What kind of music does Shreya enjoy the most?", about: "Shreya" },
-      { text: "What kind of music does Tanay enjoy the most?", about: "Tanay" },
-
-      {
-        text: "BOTH ANSWER: What is the other person’s favorite color?",
-        about: "Both"
-      },
-
-      { text: "What’s something Shreya really values in people?", about: "Shreya" },
-      { text: "What’s something Tanay is quietly proud of?", about: "Tanay" }
+      { text: "What is Shreya’s favorite food?", about: "Shreya" },
+      { text: "What is Tanay’s favorite food?", about: "Tanay" },
+      { text: "What music genre does Shreya enjoy the most?", about: "Shreya" },
+      { text: "What music genre does Tanay enjoy the most?", about: "Tanay" },
+      { text: "What time of day is Shreya most energetic?", about: "Shreya" },
+      { text: "What time of day is Tanay most energetic?", about: "Tanay" },
+      { text: "What’s something Shreya never gets tired of?", about: "Shreya" },
+      { text: "What’s something Tanay never gets tired of?", about: "Tanay" },
+      { text: "What’s one thing that always puts Shreya in a good mood?", about: "Shreya" },
+      { text: "What’s one thing that always puts Tanay in a good mood?", about: "Tanay" }
     ];
 
     const turnText = document.getElementById("turnText");
@@ -167,29 +169,22 @@
     const progressBar = document.getElementById("progressBar");
 
     function updateUI() {
-      const q = questions[qIndex];
-      const currentPlayer = players[currentPlayerIndex];
-
-      if (q.about === "Both") {
-        turnText.textContent = "Both answer";
-      } else {
-        turnText.textContent = `${currentPlayer}'s turn (about ${q.about})`;
-      }
-
+      const q = questions[index];
+      turnText.textContent = `${players[currentPlayer]}'s turn (about ${q.about})`;
       questionText.textContent = q.text;
       scoreTanay.textContent = scores.Tanay;
       scoreShreya.textContent = scores.Shreya;
-      progressBar.style.width = `${(qIndex / questions.length) * 100}%`;
+      progressBar.style.width = `${(index / questions.length) * 100}%`;
     }
 
-    function next(correct) {
-      const currentPlayer = players[currentPlayerIndex];
-      if (correct) scores[currentPlayer]++;
+    function answer(correct) {
+      const player = players[currentPlayer];
+      if (correct) scores[player]++;
 
-      currentPlayerIndex = 1 - currentPlayerIndex;
-      qIndex++;
+      currentPlayer = currentPlayer === 0 ? 1 : 0;
+      index++;
 
-      if (qIndex >= questions.length) {
+      if (index >= questions.length) {
         endGame();
       } else {
         updateUI();
@@ -197,30 +192,29 @@
     }
 
     function endGame() {
-      let result =
+      const result =
         scores.Tanay > scores.Shreya
           ? "🏆 Tanay wins!"
           : scores.Shreya > scores.Tanay
           ? "🏆 Shreya wins!"
           : "🤝 It’s a tie!";
 
+      turnText.textContent = "Game Over";
       questionText.innerHTML = `
         <div class="final">
           <h2>${result}</h2>
-          <p>Final Score — Tanay: ${scores.Tanay} · Shreya: ${scores.Shreya}</p>
+          <p>Final score — Tanay: ${scores.Tanay} · Shreya: ${scores.Shreya}</p>
         </div>
       `;
-      turnText.textContent = "Game Over";
       progressBar.style.width = "100%";
       document.getElementById("correctBtn").disabled = true;
       document.getElementById("wrongBtn").disabled = true;
     }
 
-    document.getElementById("correctBtn").addEventListener("click", () => next(true));
-    document.getElementById("wrongBtn").addEventListener("click", () => next(false));
+    document.getElementById("correctBtn").onclick = () => answer(true);
+    document.getElementById("wrongBtn").onclick = () => answer(false);
 
     updateUI();
   </script>
 </body>
 </html>
-
