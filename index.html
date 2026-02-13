@@ -1,3 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Who Knows Who Better? 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+:root {
+  --bg1:#1a1b3a;
+  --bg2:#2b145f;
+  --accent:#ff4d6d;
+  --accent-2:#ffd166;
+  --text:#f4f4ff;
+  --muted:#b8b8ff;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:system-ui,sans-serif;
+  color:var(--text);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+
+/* INTRO */
+.intro{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center,#3a1c71 0%,#1a1b3a 70%);
+  display:grid;
+  place-items:center;
+  text-align:center;
+  z-index:10;
+}
+.fadeOut{animation:fadeOut 1s forwards;}
+@keyframes fadeOut{to{opacity:0;visibility:hidden;}}
+
+/* MAIN WRAP */
+.wrap{
+  width:min(960px,94vw);
+  display:grid;
+  gap:16px;
+  opacity:0;
+  transition:opacity 1s ease;
+}
+.wrap.show{opacity:1;}
+
+.title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.scoreboard{
+  display:flex;
+  gap:16px;
+  font-weight:700;
+  color:var(--accent-2);
+}
+.progress{
+  height:10px;
+  background:#ffffff14;
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  transition:width .3s ease;
+}
+
+.card{
+  background:linear-gradient(180deg,#1a1b3a,#0f1030);
+  border-radius:22px;
+  padding:28px;
+  display:grid;
+  gap:20px;
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+}
+.round{
+  color:var(--muted);
+  text-transform:uppercase;
+  font-size:12px;
+  font-weight:700;
+}
+.question{
+  font-size:clamp(20px,3vw,26px);
+}
+
+.controls{
+  display:flex;
+  gap:12px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+.btn{
+  border:none;
+  border-radius:14px;
+  padding:12px 18px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#0b0b16;
+}
+.btn.wrong{
+  background:#ffffff1f;
+  color:var(--text);
+}
+.final{text-align:center;display:grid;gap:12px;}
+
+/* WOULD YOU RATHER GAME */
+#wouldYouRatherGame{
+  display:none;
+  text-align:center;
+}
+.wyr-card{
+  background:linear-gradient(180deg,#1a1b3a,#0f1030);
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+  min-height:200px;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  transition:transform .3s ease, opacity .3s ease;
+}
+.wyr-card.fade{
+  opacity:0;
+  transform:scale(.95);
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div class="intro" id="intro">
+  <div>
+    <h1>Shreya 💖</h1>
+    <p>Who really knows who better?</p>
+    <button class="btn" onclick="startGame()">Start 💘</button>
+  </div>
+</div>
+
+<div class="wrap" id="gameWrap">
+  <div class="title">
+    <h1>💘 Who Knows Who Better?</h1>
+    <div class="scoreboard">
+      <span>Tanay: <strong id="scoreTanay">0</strong></span>
+      <span>Shreya: <strong id="scoreShreya">0</strong></span>
+    </div>
+  </div>
+
+  <div class="progress">
+    <span id="progressBar"></span>
+  </div>
+
+  <div class="card">
+    <div class="round" id="turnText"></div>
+    <div class="question" id="questionText"></div>
+    <div class="controls">
+      <button class="btn wrong" id="wrongBtn">Wrong</button>
+      <button class="btn" id="correctBtn">Correct</button>
+    </div>
+  </div>
+
+  <!-- WOULD YOU RATHER GAME -->
+  <div id="wouldYouRatherGame">
+    <h1>💌 Would You Rather</h1>
+    <div class="wyr-card" id="wyrCard"></div>
+    <br>
+    <button class="btn" onclick="nextWYR()">Next Card 💖</button>
+  </div>
+</div>
+
 <script>
 function startGame(){
   document.getElementById("intro").classList.add("fadeOut");
@@ -129,3 +310,6 @@ function endEntireGame(){
   `;
 }
 </script>
+
+</body>
+</html>
