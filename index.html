@@ -305,10 +305,49 @@ function endEntireGame(){
     <div class="final">
       <h2>💖 The End 💖</h2>
       <p>Final Score — Tanay: ${scores.Tanay} | Shreya: ${scores.Shreya}</p>
-      <h3>Thanks for playing ❤️</h3>
+      <h3>Thanks for spending time with me on this special day. You are someone special to me. ❤️</h3>
+      
+      <br>
+      <button class="btn" onclick="openSecret()">Open Something Just For You ✉️</button>
+      
+      <div id="secretContainer" style="display:none; margin-top:30px;">
+        <div style="
+          background: linear-gradient(180deg,#2b145f,#1a1b3a);
+          padding:40px;
+          border-radius:25px;
+          box-shadow:0 30px 60px rgba(0,0,0,.5);
+          text-align:left;
+          line-height:1.8;
+          font-size:18px;
+          animation: fadeInLetter 1s ease forwards;
+        ">
+          <p><strong>To my Shryea Cray Ray.</strong></p>
+
+          <p>Seeing you happy makes me the happiest person in the whole world. You put the widest smile everr on my face. It’s insane to think how everything just fell into place.</p>
+
+          <p>I still remember the first time we met, I got there early and my heart was beating like crazy. The moment you walked out, all of my anxiety just disappeared. You had this calm cute little smile that made everything else fade for a second.</p>
+
+          <p>Since then, every moment has had its own little something. From that beautiful sunset at the beach to our not-so-ice-skating date that somehow turned into one of my favorite nights. You have this way of making even simple things feel worth remembering.</p>
+
+          <p>I still miss holding onto you at the seaside, wanting to never let go, while you gave me those miniature side-eyes everytime I said or did something cringe.</p>
+
+          <p>I hope your everyday is filled with the same kind of warmth as that sunset. You deserve all the love in the world, and more.</p>
+
+          <p>Happy Valentine’s Day to the most beautiful human I know. I can’t wait for the next time I get to see you again and maybe this time we’ll actually make that ice skating date happen.</p>
+
+          <p>I’m gonna stop yapping now hehe. can’t wait to see you again. have a 67 rizzy valentine day lil gangsta.</p>
+
+          <p style="margin-top:30px;"><strong>From FAT. 😘</strong></p>
+        </div>
+      </div>
     </div>
   `;
 }
+
+function openSecret(){
+  document.getElementById("secretContainer").style.display="block";
+}
+
 </script>
 
 </body>
