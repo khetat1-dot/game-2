@@ -1,321 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Valentine Game 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>game-uno 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg1: #1a1b3a;
+      --bg2: #2b145f;
+      --card: #12132a;
+      --accent: #ff4d6d;
+      --accent-2: #ffd166;
+      --text: #f4f4ff;
+      --muted: #b8b8ff;
+      --success: #2dd4bf;
+    }
 
-<style>
-:root{
-  --bg1:#1a1b3a;
-  --bg2:#2b145f;
-  --accent:#ff4d6d;
-  --accent2:#ffd166;
-  --text:#f4f4ff;
-  --muted:#b8b8ff;
-}
+    * { box-sizing: border-box; }
 
-*{box-sizing:border-box}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 20% -10%, #3a1c71 0%, transparent 60%),
+                  radial-gradient(900px 500px at 110% 10%, #ff4d6d22 0%, transparent 60%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      display: grid;
+      place-items: center;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  font-family:'Segoe UI',system-ui;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
-  color:var(--text);
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-}
+    .wrap {
+      width: min(960px, 94vw);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
 
-/* INTRO SCREEN */
-.intro{
-  position:fixed;
-  inset:0;
-  display:grid;
-  place-items:center;
-  background:radial-gradient(circle at center,#3a1c71 0%,#1a1b3a 70%);
-  text-align:center;
-  padding:30px;
-  z-index:10;
-  animation:fadeIn 1.5s ease forwards;
-}
+    .top {
+      display: grid;
+      gap: 12px;
+    }
 
-.intro h1{
-  font-size:42px;
-  margin:0;
-  animation:glow 2s infinite alternate;
-}
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-.intro p{
-  color:var(--muted);
-  margin:20px 0;
-  font-size:18px;
-}
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ffffff14;
+      color: var(--accent-2);
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
 
-@keyframes glow{
-  from{text-shadow:0 0 10px #ff4d6d}
-  to{text-shadow:0 0 25px #ffd166}
-}
+    .progress {
+      height: 10px;
+      background: #ffffff14;
+      border-radius: 999px;
+      overflow: hidden;
+    }
 
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width .4s ease;
+    }
 
-.fadeOut{
-  animation:fadeOut 1s forwards;
-}
+    .card {
+      background: linear-gradient(180deg, #1a1b3a, #0f1030);
+      border: 1px solid #ffffff1f;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 30px 60px rgba(0,0,0,.35);
+      display: grid;
+      gap: 20px;
+    }
 
-@keyframes fadeOut{
-  to{opacity:0;visibility:hidden}
-}
+    .round {
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
 
-/* EXPLODING HEARTS */
-.explosion{
-  position:absolute;
-  font-size:20px;
-  pointer-events:none;
-  animation:explode 1s ease-out forwards;
-}
+    .question {
+      font-size: clamp(20px, 3vw, 26px);
+      line-height: 1.3;
+    }
 
-@keyframes explode{
-  to{
-    transform:translate(var(--x),var(--y));
-    opacity:0;
-  }
-}
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
 
-/* GAME LAYOUT */
-.wrap{
-  width:min(900px,94vw);
-  display:grid;
-  gap:16px;
-  opacity:0;
-  transition:opacity 1s ease;
-}
+    .hint {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-.wrap.show{
-  opacity:1;
-}
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0b0b16;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,.35);
+    }
 
-.title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    .btn.secondary {
+      background: #ffffff1f;
+      color: var(--text);
+    }
 
-.badge{
-  padding:6px 12px;
-  border-radius:999px;
-  background:#ffffff14;
-  font-weight:600;
-}
+    .countdown {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #ffffff14;
+      font-weight: 700;
+      animation: glow 1s infinite alternate;
+    }
 
-.progress{
-  height:10px;
-  background:#ffffff14;
-  border-radius:999px;
-  overflow:hidden;
-}
-.progress span{
-  display:block;
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:width .4s ease;
-}
+    @keyframes glow {
+      0% { box-shadow: 0 0 6px #ff4d6d55; }
+      100% { box-shadow: 0 0 18px #ffd16655; }
+    }
 
-.card{
-  background:linear-gradient(180deg,#1a1b3a,#0f1030);
-  border-radius:22px;
-  padding:28px;
-  box-shadow:0 30px 60px rgba(0,0,0,.35);
-  display:grid;
-  gap:20px;
-}
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%; background: #ffffff55;
+    }
 
-.round{
-  font-size:12px;
-  text-transform:uppercase;
-  color:var(--muted);
-  font-weight:700;
-}
+    .dot.active { background: var(--success); }
 
-.question{
-  font-size:22px;
-  min-height:70px;
-}
+    .final {
+      text-align: center;
+      display: grid;
+      gap: 16px;
+    }
 
-.btn{
-  border:none;
-  border-radius:14px;
-  padding:12px 18px;
-  font-weight:700;
-  cursor:pointer;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-}
+    .final h2 { margin: 0; font-size: 30px; }
+    .final p { color: var(--muted); font-size: 18px; }
 
-.countdown{
-  padding:10px 14px;
-  border-radius:12px;
-  background:#ffffff14;
-  font-weight:700;
-}
-</style>
+    @media (max-width: 640px) {
+      .controls { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
-
-<!-- INTRO -->
-<div class="intro" id="intro">
-  <div>
-    <h1 id="introName">For My Cray Ray 💖</h1>
-    <p>One night. Three rounds. Zero holding back.</p>
-    <button class="btn" onclick="startGame()">Begin 💘</button>
-  </div>
-</div>
-
-<!-- GAME -->
-<div class="wrap" id="gameWrap">
-  <div class="title">
-    <h2>💖 Valentine Game Night</h2>
-    <span class="badge" id="playerName"></span>
-  </div>
-
-  <div class="progress"><span id="progressBar"></span></div>
-
-  <div class="card">
-    <div class="round" id="roundTitle"></div>
-    <div class="question" id="questionText"></div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div class="countdown" id="countdown" hidden>
-        Ready… <span id="count">3</span>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <h1>💖 Valentine Game Night</h1>
+        <span class="badge" id="playerName">For my Cray Ray</span>
       </div>
-      <button class="btn" id="nextBtn">Answer together 💞</button>
+      <div class="progress"><span id="progressBar"></span></div>
+    </div>
+
+    <div class="card" id="card">
+      <div class="round" id="roundTitle">Ready?</div>
+      <div class="question" id="questionText">Grab snacks, hop on the call, and answer honestly ✨</div>
+
+      <div class="controls">
+        <div class="hint">Both answer out loud, then start the countdown.</div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+          <div class="countdown" id="countdown" hidden>
+            <span id="count">3</span>
+            <span class="dot" id="d1"></span>
+            <span class="dot" id="d2"></span>
+            <span class="dot" id="d3"></span>
+          </div>
+          <button class="btn secondary" id="bothBtn">Both answer → Next</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-const HER_NAME="my Cray Ray";
+  <script>
+    const HER_NAME = 'my Cray Ray';
 
-/* EXPLODING HEART EFFECT */
-function explodeName(){
-  const nameEl=document.getElementById("introName");
-  const rect=nameEl.getBoundingClientRect();
+    const rounds = [
+      {
+        name: 'Round 1 · Sweet 🌸',
+        questions: [
+          'What’s one little thing that always makes your day better?',
+          'What’s a memory that shaped how you see relationships?',
+          'What’s one thing you value about me?',
+          'What’s something you’re proud of, even if you don’t talk about it much?',
+          'What’s one thing that always improves your mood?',
+          'What does “talking” to someone mean to you?'
+        ]
+      },
+      {
+        name: 'Round 2 · Flirty 😏',
+        questions: [
+          'What’s something small about me that grew on you over time?',
+          'What’s a moment between us that stood out to you?',
+          'What’s something you find attractive (physical and personality-wise) about me?',
+          'What’s something about me that surprised you in a good way?',
+          'What is your idea of a perfect romantic night?',
+          'Whats one trait of mine you hope never changes?',
+          'If someone asked you why you are dating me, what would you tell them?',   
+          'What’s something you notice about me that others might miss?'
+        ]
+      },
+      {
+        name: 'Round 3 · Spicy 🔥',
+        questions: [
+          'What makes a moment feel intimate to you?',
+          'What’s something about me that affects you more than you expected?',
+          'What’s something you want to experience together?',
+          'Have you ever felt a physical pull toward me?',
+          'Have you ever caught yourself wanting more than just conversation with me?',
+          'Do I ever make you feel nervous?',
+          'If we could spend the night together, what would we do',
+        ]
+      }
+    ];
 
-  for(let i=0;i<25;i++){
-    const heart=document.createElement("div");
-    heart.className="explosion";
-    heart.textContent="💖";
-    heart.style.left=rect.left+rect.width/2+"px";
-    heart.style.top=rect.top+rect.height/2+"px";
-    heart.style.setProperty("--x",(Math.random()*400-200)+"px");
-    heart.style.setProperty("--y",(Math.random()*400-200)+"px");
-    document.body.appendChild(heart);
+    let r = 0;
+    let q = 0;
+    let total = rounds.reduce((s, x) => s + x.questions.length, 0);
+    let seen = 0;
+    let ticking = false;
 
-    setTimeout(()=>heart.remove(),1000);
-  }
-}
+    const roundTitle = document.getElementById('roundTitle');
+    const questionText = document.getElementById('questionText');
+    const progressBar = document.getElementById('progressBar');
+    const bothBtn = document.getElementById('bothBtn');
+    const countdown = document.getElementById('countdown');
+    const countEl = document.getElementById('count');
+    const dots = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
+    const nameBadge = document.getElementById('playerName');
+    const card = document.getElementById('card');
 
-window.onload=()=>{
-  document.getElementById("playerName").textContent="For "+HER_NAME;
-  explodeName();
-};
+    nameBadge.textContent = For ${HER_NAME};
 
-/* INTRO TRANSITION */
-function startGame(){
-  document.getElementById("intro").classList.add("fadeOut");
-  document.getElementById("gameWrap").classList.add("show");
-}
-
-/* GAME LOGIC */
-const rounds=[
-{name:"Round 1 · Sweet 🌸",questions:[
-"What’s one little thing that makes your day better?",
-"What’s something you love about me?"
-]},
-{name:"Round 2 · Flirty 😏",questions:[
-"What’s a moment between us that replayed in your head?",
-"What’s your idea of a perfect night together?"
-]},
-{name:"Round 3 · Spicy 🔥",questions:[
-"Have you ever felt nervous around me?",
-"If we spent the night together what would we do?"
-]}
-];
-
-let r=0,q=0,seen=0;
-const total=rounds.reduce((s,x)=>s+x.questions.length,0);
-
-const roundTitle=document.getElementById("roundTitle");
-const questionText=document.getElementById("questionText");
-const progressBar=document.getElementById("progressBar");
-const nextBtn=document.getElementById("nextBtn");
-const countdown=document.getElementById("countdown");
-const countEl=document.getElementById("count");
-
-function typeText(text){
-  questionText.textContent="";
-  let i=0;
-  const iv=setInterval(()=>{
-    questionText.textContent+=text[i];
-    i++;
-    if(i>=text.length)clearInterval(iv);
-  },20);
-}
-
-function updateProgress(){
-  progressBar.style.width=Math.round((seen/total)*100)+"%";
-}
-
-function showQuestion(){
-  if(r>=rounds.length)return endGame();
-  roundTitle.textContent=rounds[r].name;
-  typeText(rounds[r].questions[q]);
-}
-
-function startCountdown(){
-  countdown.hidden=false;
-  let t=3;
-  countEl.textContent=t;
-  const iv=setInterval(()=>{
-    t--;
-    countEl.textContent=t;
-    if(t<0){
-      clearInterval(iv);
-      countdown.hidden=true;
-      next();
+    function updateProgress() {
+      const pct = Math.min(100, Math.round((seen / total) * 100));
+      progressBar.style.width = pct + '%';
     }
-  },800);
-}
 
-function next(){
-  seen++;
-  updateProgress();
-  q++;
-  if(q>=rounds[r].questions.length){r++;q=0;}
-  if(r>=rounds.length)return endGame();
-  showQuestion();
-}
+    function showQuestion() {
+      if (r >= rounds.length) return endGame();
+      const round = rounds[r];
+      roundTitle.textContent = round.name;
+      questionText.textContent = round.questions[q];
+    }
 
-function endGame(){
-  roundTitle.textContent="💘 Final";
-  questionText.innerHTML=`
-  <div style="text-align:center">
-    <h2>Happy Valentine’s Day, ${HER_NAME} 💖</h2>
-    <p>You just unlocked: my heart.</p>
-  </div>`;
-  progressBar.style.width="100%";
-  nextBtn.style.display="none";
-}
+    function startCountdown() {
+      if (ticking) return;
+      ticking = true;
+      countdown.hidden = false;
+      let t = 3;
+      countEl.textContent = t;
+      dots.forEach(d => d.classList.remove('active'));
 
-nextBtn.addEventListener("click",startCountdown);
-showQuestion();
-updateProgress();
-</script>
+      const iv = setInterval(() => {
+        dots[3 - t]?.classList.add('active');
+        t--;
+        if (t >= 0) countEl.textContent = t;
+        if (t < 0) {
+          clearInterval(iv);
+          countdown.hidden = true;
+          dots.forEach(d => d.classList.remove('active'));
+          ticking = false;
+          next();
+        }
+      }, 900);
+    }
 
+    function next() {
+      seen++;
+      updateProgress();
+      q++;
+      if (q >= rounds[r].questions.length) { r++; q = 0; }
+      if (r >= rounds.length) return endGame();
+      showQuestion();
+    }
+
+    function endGame() {
+      roundTitle.textContent = '💘 Final Screen';
+      questionText.innerHTML = 
+        <div class="final">
+          <h2>Happy Valentine’s Day, ${HER_NAME} 💖</h2>
+          <p>Thanks for playing. I mishh you and I like you and OKAY NEXT GAME.</p>
+        </div>;
+      bothBtn.textContent = 'Replay';
+      bothBtn.onclick = () => location.reload();
+      progressBar.style.width = '100%';
+    }
+
+    bothBtn.addEventListener('click', startCountdown);
+
+    showQuestion();
+    updateProgress();
+  </script>
 </body>
 </html>
