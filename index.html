@@ -2,18 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>game-uno 💖</title>
+  <title>Who Knows Who Better? 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     :root {
       --bg1: #1a1b3a;
       --bg2: #2b145f;
-      --card: #12132a;
       --accent: #ff4d6d;
       --accent-2: #ffd166;
       --text: #f4f4ff;
       --muted: #b8b8ff;
-      --success: #2dd4bf;
     }
 
     * { box-sizing: border-box; }
@@ -21,11 +20,9 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+      font-family: system-ui, sans-serif;
       color: var(--text);
-      background: radial-gradient(1200px 600px at 20% -10%, #3a1c71 0%, transparent 60%),
-                  radial-gradient(900px 500px at 110% 10%, #ff4d6d22 0%, transparent 60%),
-                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
       display: grid;
       place-items: center;
     }
@@ -33,29 +30,20 @@
     .wrap {
       width: min(960px, 94vw);
       display: grid;
-      grid-template-columns: 1fr;
       gap: 16px;
-    }
-
-    .top {
-      display: grid;
-      gap: 12px;
     }
 
     .title {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      align-items: center;
     }
 
-    .badge {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #ffffff14;
+    .scoreboard {
+      display: flex;
+      gap: 16px;
+      font-weight: 700;
       color: var(--accent-2);
-      font-weight: 600;
-      letter-spacing: .3px;
     }
 
     .progress {
@@ -65,251 +53,185 @@
       overflow: hidden;
     }
 
-    .progress > span {
+    .progress span {
       display: block;
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      transition: width .4s ease;
+      transition: width .3s ease;
     }
 
     .card {
       background: linear-gradient(180deg, #1a1b3a, #0f1030);
-      border: 1px solid #ffffff1f;
       border-radius: 22px;
       padding: 28px;
-      box-shadow: 0 30px 60px rgba(0,0,0,.35);
       display: grid;
       gap: 20px;
+      box-shadow: 0 30px 60px rgba(0,0,0,.4);
     }
 
     .round {
       color: var(--muted);
-      font-weight: 700;
-      letter-spacing: .4px;
       text-transform: uppercase;
       font-size: 12px;
+      font-weight: 700;
     }
 
     .question {
       font-size: clamp(20px, 3vw, 26px);
-      line-height: 1.3;
     }
 
     .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
       gap: 12px;
-      align-items: center;
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: 14px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
     }
 
     .btn {
-      appearance: none;
       border: none;
       border-radius: 14px;
-      padding: 12px 16px;
+      padding: 12px 18px;
       font-size: 16px;
       font-weight: 700;
-      color: #0b0b16;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       cursor: pointer;
-      box-shadow: 0 10px 20px rgba(0,0,0,.35);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0b16;
     }
 
-    .btn.secondary {
+    .btn.wrong {
       background: #ffffff1f;
       color: var(--text);
     }
 
-    .countdown {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: #ffffff14;
-      font-weight: 700;
-      animation: glow 1s infinite alternate;
-    }
-
-    @keyframes glow {
-      0% { box-shadow: 0 0 6px #ff4d6d55; }
-      100% { box-shadow: 0 0 18px #ffd16655; }
-    }
-
-    .dot {
-      width: 10px; height: 10px; border-radius: 50%; background: #ffffff55;
-    }
-
-    .dot.active { background: var(--success); }
-
     .final {
       text-align: center;
       display: grid;
-      gap: 16px;
-    }
-
-    .final h2 { margin: 0; font-size: 30px; }
-    .final p { color: var(--muted); font-size: 18px; }
-
-    @media (max-width: 640px) {
-      .controls { grid-template-columns: 1fr; }
+      gap: 12px;
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="title">
-        <h1>💖 Valentine Game Night</h1>
-        <span class="badge" id="playerName">For my Cray Ray</span>
+    <div class="title">
+      <h1>💘 Who Knows Who Better?</h1>
+      <div class="scoreboard">
+        <span>Tanay: <strong id="scoreTanay">0</strong></span>
+        <span>Shreya: <strong id="scoreShreya">0</strong></span>
       </div>
-      <div class="progress"><span id="progressBar"></span></div>
     </div>
 
-    <div class="card" id="card">
-      <div class="round" id="roundTitle">Ready?</div>
-      <div class="question" id="questionText">Grab snacks, hop on the call, and answer honestly ✨</div>
+    <div class="progress">
+      <span id="progressBar"></span>
+    </div>
+
+    <div class="card">
+      <div class="round" id="turnText"></div>
+      <div class="question" id="questionText"></div>
 
       <div class="controls">
-        <div class="hint">Both answer out loud, then start the countdown.</div>
-        <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
-          <div class="countdown" id="countdown" hidden>
-            <span id="count">3</span>
-            <span class="dot" id="d1"></span>
-            <span class="dot" id="d2"></span>
-            <span class="dot" id="d3"></span>
-          </div>
-          <button class="btn secondary" id="bothBtn">Both answer → Next</button>
-        </div>
+        <button class="btn wrong" id="wrongBtn">Wrong</button>
+        <button class="btn" id="correctBtn">Correct</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const HER_NAME = 'my Cray Ray';
+  <script defer>
+    const players = ["Tanay", "Shreya"];
+    let currentPlayer = 0;
+    let index = 0;
+    let tiebreakerMode = false;
 
-    const rounds = [
-      {
-        name: 'Round 1 · Sweet 🌸',
-        questions: [
-          'What’s one little thing that always makes your day better?',
-          'What’s a memory that shaped how you see relationships?',
-          'What’s one thing you value about me?',
-          'What’s something you’re proud of, even if you don’t talk about it much?',
-          'What’s one thing that always improves your mood?',
-          'What does “talking” to someone mean to you?'
-        ]
-      },
-      {
-        name: 'Round 2 · Flirty 😏',
-        questions: [
-          'What’s something small about me that grew on you over time?',
-          'What’s a moment between us that stood out to you?',
-          'What’s something you find attractive (physical and personality-wise) about me?',
-          'What’s something about me that surprised you in a good way?',
-          'What is your idea of a perfect romantic night?',
-          'Whats one trait of mine you hope never changes?',
-          'If someone asked you why you are dating me, what would you tell them?',   
-          'What’s something you notice about me that others might miss?'
-        ]
-      },
-      {
-        name: 'Round 3 · Spicy 🔥',
-        questions: [
-          'What makes a moment feel intimate to you?',
-          'What’s something about me that affects you more than you expected?',
-          'What’s something you want to experience together?',
-          'Have you ever felt a physical pull toward me?',
-          'Have you ever caught yourself wanting more than just conversation with me?',
-          'Do I ever make you feel nervous?',
-          'If we could spend the night together, what would we do',
-        ]
-      }
+    const scores = { Tanay: 0, Shreya: 0 };
+
+    const questions = [
+      { text: "What is Shreya’s favorite color?", about: "Shreya" },
+      { text: "What is Tanay’s favorite color?", about: "Tanay" },
+      { text: "What is Shreya’s favorite food?", about: "Shreya" },
+      { text: "What is Tanay’s favorite food?", about: "Tanay" },
+      { text: "What kind of music does Shreya like the most?", about: "Shreya" },
+      { text: "What kind of music does Tanay like the most?", about: "Tanay" },
+      { text: "What time of day is Shreya most active?", about: "Shreya" },
+      { text: "What time of day is Tanay most active?", about: "Tanay" },
+      { text: "What’s Shreya’s favorite way to relax?", about: "Shreya" },
+      { text: "What’s Tanay’s favorite way to relax?", about: "Tanay" },
+      { text: "What’s one thing Shreya never gets tired of?", about: "Shreya" },
+      { text: "What’s one thing Tanay never gets tired of?", about: "Tanay" },
+      { text: "What’s Shreya’s favorite drink?", about: "Shreya" },
+      { text: "What’s Tanay’s favorite drink?", about: "Tanay" },
+      { text: "What’s a hobby Shreya enjoys?", about: "Shreya" },
+      { text: "What’s a hobby Tanay enjoys?", about: "Tanay" },
+      { text: "What kind of weather does Shreya prefer?", about: "Shreya" },
+      { text: "What kind of weather does Tanay prefer?", about: "Tanay" }
     ];
 
-    let r = 0;
-    let q = 0;
-    let total = rounds.reduce((s, x) => s + x.questions.length, 0);
-    let seen = 0;
-    let ticking = false;
+    const tiebreakers = [
+      "What is the other person’s favorite snack?",
+      "What color suits the other person the most?",
+      "What’s the other person’s comfort movie?",
+      "What’s the other person more likely to do on a free evening?"
+    ];
 
-    const roundTitle = document.getElementById('roundTitle');
-    const questionText = document.getElementById('questionText');
-    const progressBar = document.getElementById('progressBar');
-    const bothBtn = document.getElementById('bothBtn');
-    const countdown = document.getElementById('countdown');
-    const countEl = document.getElementById('count');
-    const dots = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
-    const nameBadge = document.getElementById('playerName');
-    const card = document.getElementById('card');
+    const turnText = document.getElementById("turnText");
+    const questionText = document.getElementById("questionText");
+    const scoreTanay = document.getElementById("scoreTanay");
+    const scoreShreya = document.getElementById("scoreShreya");
+    const progressBar = document.getElementById("progressBar");
 
-    nameBadge.textContent = For ${HER_NAME};
-
-    function updateProgress() {
-      const pct = Math.min(100, Math.round((seen / total) * 100));
-      progressBar.style.width = pct + '%';
+    function updateUI() {
+      const q = questions[index];
+      turnText.textContent = `${players[currentPlayer]}'s turn (about ${q.about})`;
+      questionText.textContent = q.text;
+      scoreTanay.textContent = scores.Tanay;
+      scoreShreya.textContent = scores.Shreya;
+      progressBar.style.width = `${(index / questions.length) * 100}%`;
     }
 
-    function showQuestion() {
-      if (r >= rounds.length) return endGame();
-      const round = rounds[r];
-      roundTitle.textContent = round.name;
-      questionText.textContent = round.questions[q];
-    }
+    function answer(correct) {
+      const player = players[currentPlayer];
+      if (correct) scores[player]++;
 
-    function startCountdown() {
-      if (ticking) return;
-      ticking = true;
-      countdown.hidden = false;
-      let t = 3;
-      countEl.textContent = t;
-      dots.forEach(d => d.classList.remove('active'));
+      currentPlayer = currentPlayer === 0 ? 1 : 0;
+      index++;
 
-      const iv = setInterval(() => {
-        dots[3 - t]?.classList.add('active');
-        t--;
-        if (t >= 0) countEl.textContent = t;
-        if (t < 0) {
-          clearInterval(iv);
-          countdown.hidden = true;
-          dots.forEach(d => d.classList.remove('active'));
-          ticking = false;
-          next();
-        }
-      }, 900);
-    }
-
-    function next() {
-      seen++;
-      updateProgress();
-      q++;
-      if (q >= rounds[r].questions.length) { r++; q = 0; }
-      if (r >= rounds.length) return endGame();
-      showQuestion();
+      if (index >= questions.length) {
+        endGame();
+      } else {
+        updateUI();
+      }
     }
 
     function endGame() {
-      roundTitle.textContent = '💘 Final Screen';
-      questionText.innerHTML = 
+      if (scores.Tanay === scores.Shreya && !tiebreakerMode) {
+        tiebreakerMode = true;
+        const randomQ = tiebreakers[Math.floor(Math.random() * tiebreakers.length)];
+        turnText.textContent = "🔥 TIEBREAKER";
+        questionText.textContent = randomQ;
+        progressBar.style.width = "100%";
+        return;
+      }
+
+      const result =
+        scores.Tanay > scores.Shreya
+          ? "🏆 Tanay wins!"
+          : "🏆 Shreya wins!";
+
+      turnText.textContent = "Game Over";
+      questionText.innerHTML = `
         <div class="final">
-          <h2>Happy Valentine’s Day, ${HER_NAME} 💖</h2>
-          <p>Thanks for playing. I mishh you and I like you and OKAY NEXT GAME.</p>
-        </div>;
-      bothBtn.textContent = 'Replay';
-      bothBtn.onclick = () => location.reload();
-      progressBar.style.width = '100%';
+          <h2>${result}</h2>
+          <p>Final score — Tanay: ${scores.Tanay} · Shreya: ${scores.Shreya}</p>
+        </div>
+      `;
+      document.getElementById("correctBtn").disabled = true;
+      document.getElementById("wrongBtn").disabled = true;
     }
 
-    bothBtn.addEventListener('click', startCountdown);
+    document.getElementById("correctBtn").onclick = () => answer(true);
+    document.getElementById("wrongBtn").onclick = () => answer(false);
 
-    showQuestion();
-    updateProgress();
+    updateUI();
   </script>
 </body>
 </html>
