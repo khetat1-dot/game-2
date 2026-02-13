@@ -25,13 +25,73 @@
       background: linear-gradient(135deg, var(--bg1), var(--bg2));
       display: grid;
       place-items: center;
+      overflow: hidden;
+    }
+
+    /* 🎬 INTRO SCREEN */
+    .intro {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #3a1c71 0%, #1a1b3a 70%);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      z-index: 10;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    .intro h1 {
+      font-size: 42px;
+      margin: 0;
+      animation: glow 2s infinite alternate;
+    }
+
+    .intro p {
+      color: var(--muted);
+      margin: 16px 0 24px;
+      font-size: 18px;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff4d6d; }
+      to { text-shadow: 0 0 25px #ffd166; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .fadeOut { animation: fadeOut 1s forwards; }
+
+    /* 💖 HEART EXPLOSION */
+    .heart {
+      position: fixed;
+      font-size: 20px;
+      pointer-events: none;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      to {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+      }
     }
 
     .wrap {
       width: min(960px, 94vw);
       display: grid;
       gap: 16px;
+      opacity: 0;
+      transition: opacity 1s ease;
     }
+
+    .wrap.show { opacity: 1; }
 
     .title {
       display: flex;
@@ -113,7 +173,17 @@
 </head>
 
 <body>
-  <div class="wrap">
+
+  <!-- 🎬 INTRO -->
+  <div class="intro" id="intro">
+    <div>
+      <h1 id="introName">Shreya 💖</h1>
+      <p>Who really knows who better?</p>
+      <button class="btn" onclick="startGame()">Start 💘</button>
+    </div>
+  </div>
+
+  <div class="wrap" id="gameWrap">
     <div class="title">
       <h1>💘 Who Knows Who Better?</h1>
       <div class="scoreboard">
@@ -138,6 +208,32 @@
   </div>
 
   <script defer>
+    /* 💖 NAME EXPLOSION */
+    function explodeName() {
+      const name = document.getElementById("introName");
+      const rect = name.getBoundingClientRect();
+
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = rect.left + rect.width / 2 + "px";
+        heart.style.top = rect.top + rect.height / 2 + "px";
+        heart.style.setProperty("--x", (Math.random() * 400 - 200) + "px");
+        heart.style.setProperty("--y", (Math.random() * 400 - 200) + "px");
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
+    }
+
+    function startGame() {
+      document.getElementById("intro").classList.add("fadeOut");
+      document.getElementById("gameWrap").classList.add("show");
+    }
+
+    window.onload = explodeName;
+
+    /* ORIGINAL GAME SCRIPT BELOW (UNCHANGED) */
     const players = ["Tanay", "Shreya"];
     let currentPlayer = 0;
     let index = 0;
