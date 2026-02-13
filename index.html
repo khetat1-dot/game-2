@@ -213,12 +213,14 @@ const questions=[
 { text: "Tea or Coffee. which one does Tanay prefer", about: "Tanay" }, 
 { text: "What's Shreya's favourite Ice cream flavour", about: "Shreya" }, 
 { text: "What's Tanay's favourite Ice cream flavour", about: "Tanay" } 
-]; 
+];
 
-const tiebreakers = [ "What is the other person’s favorite snack?", 
-                     "What color suits the other person the most?", 
-                     "What’s the other person’s comfort movie?", 
-                     "What’s the other person more likely to do on a free evening?"
+const tiebreakers = [
+"What is the other person’s favorite snack?", 
+"What color suits the other person the most?", 
+"What’s the other person’s comfort movie?", 
+"What’s the other person more likely to do on a free evening?"
+];
 
 const turnText=document.getElementById("turnText");
 const questionText=document.getElementById("questionText");
@@ -230,6 +232,7 @@ function updateUI(){
   questionText.textContent=q.text;
   progressBar.style.width=`${(index/questions.length)*100}%`;
 }
+
 function answer(correct){
   const player=players[currentPlayer];
   if(correct)scores[player]++;
@@ -238,6 +241,7 @@ function answer(correct){
   if(index>=questions.length){endGame();}
   else{updateUI();}
 }
+
 function endGame(){
   turnText.textContent="Game Over";
   questionText.innerHTML=`
@@ -249,8 +253,10 @@ function endGame(){
   document.getElementById("correctBtn").style.display="none";
   document.getElementById("wrongBtn").style.display="none";
 }
+
 document.getElementById("correctBtn").onclick=()=>answer(true);
 document.getElementById("wrongBtn").onclick=()=>answer(false);
+
 updateUI();
 
 /* WOULD YOU RATHER LOGIC */
@@ -260,26 +266,17 @@ const wyrQuestions=[
 "Would you rather cook/bake together or order food and binge-watch shows?",
 "Would you rather kiss me or hug me right now. (OR BOTH)?",
 "Would you rather always text good morning or always call good night?",
-"Would you rather receive a surprise bouquet of flowers or a heartfelt handwritten letter?',
+"Would you rather receive a surprise bouquet of flowers or a heartfelt handwritten letter?",
 "Would you rather always have to whisper or always have to shout?",
-  'Would you rather have a unicorn horn or a squirrel tail?',
-  'Would you rather always have damp socks or always have a pebble in your shoe?',
-  'Would you rather have hands for feet or feet for hands?',
-  'Would you rather always have to skip everywhere instead of walk or always have to break into song?',
-  'Would you rather always be 10 minutes late or always be 20 minutes early?',
-  'Would you rather speak every language in the world or play every instrument?',
-  'Would you rather have to speak in rhyme or speak in riddles for the rest of your life?',
-  'Would you rather not brush your teeth for a week or not shower for a month?',
-  'Would you rather see babies dressed as animals or animals dressed as humans?',
-  
-
-
-
-
-
-
-
-  
+'Would you rather have a unicorn horn or a squirrel tail?',
+'Would you rather always have damp socks or always have a pebble in your shoe?',
+'Would you rather have hands for feet or feet for hands?',
+'Would you rather always have to skip everywhere instead of walk or always have to break into song?',
+'Would you rather always be 10 minutes late or always be 20 minutes early?',
+'Would you rather speak every language in the world or play every instrument?',
+'Would you rather have to speak in rhyme or speak in riddles for the rest of your life?',
+'Would you rather not brush your teeth for a week or not shower for a month?',
+'Would you rather see babies dressed as animals or animals dressed as humans?'
 ];
 
 let wyrIndex=0;
@@ -289,9 +286,11 @@ function startWYR(){
   document.getElementById("wouldYouRatherGame").style.display="block";
   showWYR();
 }
+
 function showWYR(){
   document.getElementById("wyrCard").textContent=wyrQuestions[wyrIndex];
 }
+
 function nextWYR(){
   const card=document.getElementById("wyrCard");
   card.classList.add("fade");
@@ -302,6 +301,7 @@ function nextWYR(){
   },300);
 }
 </script>
+
 
 </body>
 </html>
